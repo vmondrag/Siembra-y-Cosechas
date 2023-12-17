@@ -1,26 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Nov 12 05:46:35 2023
+Created on Sun Nov 22 05:46:35 2023
 
 @author: victor.mondragon
 
 purpose:
-Boston housing
-Linear regression, KNN Regressor, Random Forest regressor
-Main Page: 
-upload the file
-view the data in data editor
-save the edited data
-clean the data
+Bogota Colombia Proyecto Lab SNUIRA - UPRA  housing
+Regresión lineal, Regresor KNN, Regresor de Bosque Aleatorio
+Página Principal:
+cargar el archivo
+ver los datos en el editor de datos
+guardar los datos editados
+limpiar los datos
 
-Analyze the data:
-plot the correaltion, outliers, bar charts
+Analizar los datos:
+graficar la correlación, los valores atípicos, los gráficos de barras
 
-Build and Evaluate te Model:
-Select the model and its hyperparameters
-display model metrics
-enter a new data set and display the predicted value against the actula value of test dataset
+Construir y Evaluar el Modelo:
+Seleccionar el modelo y sus hiperparámetros
+mostrar métricas del modelo
+ingresar un nuevo conjunto de datos y mostrar el valor predicho frente al valor real del conjunto de datos de prueba
+
 """
 
 from xgboost import plot_importance
@@ -75,7 +76,7 @@ def random_forest_model():
 def linear_regression_model():
     if 'df' in st.session_state:
         df=st.session_state['df']
-        selected_imp_columns_lr = st.multiselect('Select columns for training Linear Regression:', df.columns[:-1], key='lr')
+        selected_imp_columns_lr = st.multiselect('Seleccionar columnas para entrenar Regresión Lineal:', df.columns[:-1], key='lr')
         if selected_imp_columns_lr !=[]:
             X_train, y_train, X_test, y_test=create_test_train_data(selected_imp_columns_lr)
             
@@ -147,11 +148,11 @@ def xgboost_pred():
         df=st.session_state['df']
         
         #Sliders for hyperparameter selection
-        max_depth = st.slider('Select a value for max_depth',4, 7, 5)
-        n_estimators = st.slider('Select a value for n_estimator',300, 700, 400)
-        learning_rate = st.slider('Select a value for learning rate',0.01, 0.05, 0.01)
+        max_depth = st.slider('Seleccionar un valor para max_depth',4, 7, 5)
+        n_estimators = st.slider('Seleccionar un valor para n_estimator',300, 700, 400)
+        learning_rate = st.slider('Seleccionar un valor para learning rate',0.01, 0.05, 0.01)
         # select columns based on feature importances
-        selected_imp_columns_xgb = st.multiselect('Select columns for training:', df.columns[:-1],  key='xgb')
+        selected_imp_columns_xgb = st.multiselect('Seleccionar columnas para training:', df.columns[:-1],  key='xgb')
         if selected_imp_columns_xgb !=[]:
             model = xgb.XGBRegressor(objective ='reg:linear', 
                                      learning_rate = learning_rate,
@@ -242,7 +243,7 @@ def clean_data():
         st.subheader("No. of rows containing null value",)
         # Display Null count
         st.metric("Null value", count_rows_with_nan, int(len(df)-count_rows_with_nan))    
-        field = st.selectbox('Select Field to Analyze for Outliers', df.columns)
+        field = st.selectbox('Seleccionar Campo para Analizar Valores Atípicos - Outliers', df.columns)
         # Plot and display in Streamlit
         if field:
             st.dataframe(detect_outliers(df, field))
@@ -371,18 +372,18 @@ def model_selection():
         
         
 # Title of the web app
-st.title("Machine learning Buddy:high_brightness:")    
+st.title("Machine learning SNUIRA: Siembra y Cosechas:")    
 # Page Layout
-st.sidebar.title("Navigation Options")
+st.sidebar.title("Opciones de Nevegación")
 
 # Display different functionalities 
-choice = st.sidebar.radio("Go to", ("Data View", "Data Analysis",  "Model Prediction"))
+choice = st.sidebar.radio("Go to", ("Vizualizar Datos", "Análisis de Datos", "Modelo para Predición"))
 
 # Allow user to select a CSV file for Data Analysis
-if choice == "Data View":
+if choice == "Vizualizar Datos":
     load_data()
-elif choice == "Data Analysis":
+elif choice == "Análisis de Datos":
     data_page()
-elif choice=="Model Prediction":
+elif choice=="Modelo para Predición":
     model_selection()
 
